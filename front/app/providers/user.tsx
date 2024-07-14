@@ -18,7 +18,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const [refreshToken, setRefreshToken] = useState<string | null>();
     const [path, _] = useState(usePathname());
     const router = useRouter();
-    const { busy, setBusy } = useContext(BusyContext);
 
     const setSignToken = (userId: string, Token: string, refreshToken: string) => {
         window.localStorage.setItem("uid", userId);
@@ -30,12 +29,11 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     useEffect(() => {
-        // setBusy(true);
         setUser(window.localStorage.getItem("uid") ?? undefined);
         setToken(window.localStorage.getItem("token") ?? undefined);
         setRefreshToken(window.localStorage.getItem("refreshToken"))
 
-    }, [setBusy])
+    }, [])
 
     return (
         <UserContext.Provider value={{ user, token, setUser: setSignToken }}>

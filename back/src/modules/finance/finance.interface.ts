@@ -48,4 +48,6 @@ export interface IFinanceService {
   ): Promise<IPaginated<IFinanceWatchSymbol>>;
 
   removeSymbolFromWatchlist(id: string, user : User): void;
+  getStockSymbol(symbol: string): Promise<IFinanceSymbol>;
+  getSymbolWatchlistBySymbol(user: User, symbol: string): Promise<IFinanceWatchSymbol[]>;
 }

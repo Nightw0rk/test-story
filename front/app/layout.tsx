@@ -18,7 +18,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <BusyProvider>
       <UserProvider>
         <SymbolsProvider>
           <html lang="en">
@@ -26,6 +25,5 @@ export default function RootLayout({
           </html>
         </SymbolsProvider>
       </UserProvider>
-    </BusyProvider>
   );
 }

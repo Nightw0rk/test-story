@@ -8,15 +8,12 @@ import Notiflix from "notiflix";
 
 export default function Home() {
   const userContext = useContext(UserContext);
-  const { busy, setBusy } = useContext(BusyContext);
   const sign = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setBusy(true);
     const email = e.currentTarget.email.value;
     const password = e.currentTarget.password.value;
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
-      setBusy(false)
       if (!user.user) {
         return
       }
@@ -24,7 +21,6 @@ export default function Home() {
       userContext.setUser(u.uid, await u.getIdToken(), u.refreshToken);
       Notiflix.Notify.success("Sign in successful");
     } catch (error) {
-      setBusy(false)
       Notiflix.Notify.failure("Sign in is failed");
       console.error(error);
     }
@@ -46,7 +42,7 @@ export default function Home() {
           name="password"
           className="p-2 border border-gray-300 rounded"
         />
-        <button disabled={busy} className="p-2 bg-blue-500 text-white rounded disabled:bg-black-40">Sign in</button>
+        <button className="p-2 bg-blue-500 text-white rounded disabled:bg-black-40">Sign in</button>
       </form>
     </main>
   );

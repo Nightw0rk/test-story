@@ -3,7 +3,7 @@ import admin from "firebase-admin";
 import * as path from "path";
 
 const serviceAccount = require(
-  path.resolve("./src/modules/user/serviceAccount.json")
+  path.resolve("./serviceAccount.json")
 );
 
 @Injectable()
@@ -17,6 +17,10 @@ export class PreauthMiddleware implements NestMiddleware {
   }
 
   use(req: any, res: any, next: () => void) {
+    if (req.method === "OPTIONS" || req.method === "HEAD") {
+      next()
+      return
+    }
     if (!req.headers.authorization) {
       res.status(401).send("Unauthorized");
       return;

@@ -36,18 +36,9 @@ export class AppModule implements NestModule {
         path: "/user/auth",
         method: RequestMethod.ALL,
       })
-      .exclude({
-        path: "*",
-        method: RequestMethod.OPTIONS | RequestMethod.GET,
-      })
       .forRoutes({
         path: "*",
-        method:
-          RequestMethod.DELETE |
-          RequestMethod.PATCH |
-          RequestMethod.POST |
-          RequestMethod.PUT |
-          RequestMethod.GET,
+        method: RequestMethod.ALL,
       });
   }
 }

@@ -41,6 +41,16 @@ export class FinanceController {
     }
   }
 
+  @Get("/symbols/:symbol")
+  async getStockSymbol(@Param("symbol") symbol: string) {
+    try {
+      const data = await this.financeService.getStockSymbol(symbol);
+      return Response.success(data);
+    } catch (error) {
+      return Response.error(error.message, 400);
+    }
+  }
+
   @Get("/candles")
   async getStockCandles(
     @Query("symbol") symbol: string,
@@ -94,6 +104,9 @@ export class FinanceController {
   async removeSymbolFromWatchlist(@GetUser() user, @Param("id") id: string) {
     try {
       await this.financeService.removeSymbolFromWatchlist(id, user);
+      const now = new Date()
+      const dayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000)
+      await this.financeService.getStockCandles("AAPL", "1h", now.getTime(), dayAgo.getTime());
       return Response.success(null);
     } catch (error) {
       return Response.error(error.message, 400);
@@ -117,6 +130,28 @@ export class FinanceController {
         total: data.total,
         totalPages: data.totalPages,
       });
+    } catch (error) {
+      return Response.error(error.message, 400);
+    }
+  }
+
+  @Get("/watch/:symbol")
+  async getSymbolWatchlistBySymbol(
+    @GetUser() user,
+    @Param("symbol") symbol: string
+  ) {
+    if (!symbol) {
+      return Response.error("Symbol is required", 400);
+    }
+    if (!user) {
+      return Response.error("User is required", 400);
+    }
+    try {
+      const data = await this.financeService.getSymbolWatchlistBySymbol(
+        user,
+        symbol
+      );
+      return Response.success(data);
     } catch (error) {
       return Response.error(error.message, 400);
     }

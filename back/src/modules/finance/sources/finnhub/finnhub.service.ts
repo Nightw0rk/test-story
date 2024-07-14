@@ -120,7 +120,7 @@ export class FinnHubService implements IFinanceService {
       return [];
     }
     if ("error" in data) {
-      throw new Error(data.error);
+      return []
     }
     return data;
   }
@@ -280,5 +280,39 @@ export class FinnHubService implements IFinanceService {
         JSON.stringify({ type: "unsubscribe", symbol: watch.symbol })
       );
     }
+  }
+
+  async getStockSymbol(symbol: string): Promise<IFinanceSymbol> {
+    const _symbol = await this.symbolModel.findOne({ symbol }).exec();
+    if (!_symbol) {
+      throw new Error("Symbol not found");
+    }
+    return _symbol;
+  }
+
+  async getSymbolWatchlistBySymbol(
+    user: any,
+    symbol: string
+  ): Promise<IFinanceWatchSymbol[]> {
+    console.log(user)
+    const watches = await this.symbolWatchModel
+      .find({ uid: user.uid, symbol: symbol })
+      .exec();
+    if (!watches) {
+      throw new Error("Symbol not found");
+    }
+    const data = await Promise.all(
+      watches.map(async (watchSymbol) => {
+        return {
+          sid: watchSymbol._id,
+          symbol: await this.symbolModel
+            .findOne({ symbol: watchSymbol.symbol })
+            .exec(),
+          price: watchSymbol.price,
+          direction: watchSymbol.direction,
+        };
+      })
+    );
+    return data;
   }
 }
