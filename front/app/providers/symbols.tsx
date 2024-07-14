@@ -15,6 +15,8 @@ interface SymbolsContextType {
 
 export const SymbolsContext = createContext({} as SymbolsContextType);
 
+const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3000"
+
 export const SymbolsProvider = ({ children }: { children: React.ReactNode }) => {
     const { token } = useContext(UserContext);
     const [symbols, setSymbols] = useState<any[]>();
@@ -26,7 +28,7 @@ export const SymbolsProvider = ({ children }: { children: React.ReactNode }) => 
             return;
         }
         try {
-            const res = await fetch(`http://localhost:3000/finance/watch/${id}`, {
+            const res = await fetch(`${BACKEND_URL}/finance/watch/${id}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -50,7 +52,7 @@ export const SymbolsProvider = ({ children }: { children: React.ReactNode }) => 
             return [];
         }
         try {
-            const res = await fetch(`http://localhost:3000/finance/watch/${symbol}`, {
+            const res = await fetch(`${BACKEND_URL}/finance/watch/${symbol}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -69,7 +71,7 @@ export const SymbolsProvider = ({ children }: { children: React.ReactNode }) => 
             return;
         }
         try {
-            const res = await fetch(`http://localhost:3000/finance/watch/${symbol}`, {
+            const res = await fetch(`${BACKEND_URL}/finance/watch/${symbol}`, {
                 method: 'PUT',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -94,7 +96,7 @@ export const SymbolsProvider = ({ children }: { children: React.ReactNode }) => 
             return null;
         }
         try {
-            const res = await fetch(`http://localhost:3000/finance/symbols/${symbol}`, {
+            const res = await fetch(`${BACKEND_URL}/finance/symbols/${symbol}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -116,7 +118,7 @@ export const SymbolsProvider = ({ children }: { children: React.ReactNode }) => 
             return [];
         }
         try {
-            const res = await fetch(`http://localhost:3000/finance/symbols?page=${page}&limit=100`, {
+            const res = await fetch(`${BACKEND_URL}/finance/symbols?page=${page}&limit=100`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
